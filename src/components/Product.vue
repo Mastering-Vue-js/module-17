@@ -2,13 +2,27 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, reactive, onBeforeMount } from "vue";
-import axios from "axios";
 import { cart } from "../store/cart";
+import { authStore } from "../store/store";
 const route = useRoute();
 const id = route.params.id;
-const product = reactive({});
+// const product = reactive({});
+const product = ref({});
 const comments = ref([]);
-onBeforeMount(() => {});
+onBeforeMount(() => {
+  const res = authStore.fetchPublicApi(`/api/products/${id}`, {}, "GET");
+  res.then((data) => {
+    // product.id = data.id;
+    // product.title = data.title;
+    // product.price = data.price;
+    // product.description = data.description;
+    // product.category = data.category;
+    // product.image = data.image;
+    // product.rating = data.rating;
+    // product.rating_count = data.rating_count;
+    product.value = data;
+  });
+});
 </script>
 <template>
   <article class="mb-10">
@@ -16,19 +30,13 @@ onBeforeMount(() => {});
       {{ product.title }}
     </h1>
     <p>
-      <img
-        class="w-60"
-        src="https://images.unsplash.com/photo-1711843250832-404dae8ff71d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
-      />
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem animi
-      reprehenderit cum, voluptate temporibus aliquid vero nesciunt iste culpa
-      architecto. Ullam quisquam totam dolore pariatur repudiandae dignissimos
-      eum earum voluptas.
+      <img class="w-60" :src="product.image" alt="" />
+      {{ product.description }}
     </p>
-    <p>Price: $10</p>
+    <p>Price: ${{ product.price }}</p>
     <p>
       <button
+        @click="cart.addItem(product)"
         class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Add To Cart

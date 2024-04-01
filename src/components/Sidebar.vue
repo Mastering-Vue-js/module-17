@@ -20,7 +20,7 @@ const auth = authStore;
         <router-link to="/products">Products</router-link>
       </li>
       <li>
-        <router-link to="/cart">Cart ( 0 )</router-link>
+        <router-link to="/cart">Cart ( {{ cart.totalCartItems }} )</router-link>
       </li>
       <li v-if="auth.isAuthenticated">
         <router-link to="/orders">Orders </router-link>

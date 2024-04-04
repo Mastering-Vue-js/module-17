@@ -4,6 +4,16 @@ import { cart } from './cart'
 const order = reactive({
     orders: [],
     async fetchOrders() {
+        const res = authStore.fetchProtectedApi('/api/orders');
+        res.then(response => {
+            this.orders = response.map(order => {
+                return {
+                    toggleProducts: false,
+                    ...order,
+                }
+            });
+            this.orders.reverse();
+        })
     },
     async placeOrder(totalPrice, items) {
         const products = Object.values(items).map(item => {

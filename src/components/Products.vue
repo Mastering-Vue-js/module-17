@@ -12,6 +12,9 @@ onBeforeMount(() => {
   const res = authStore.fetchPublicApi("/api/products", {}, "GET");
   res.then((data) => {
     products.value = data;
+    if(authStore.isAuthenticated) {
+      wishlist.fetchWishlist();
+    }
   });
 });
 </script>
@@ -54,7 +57,7 @@ onBeforeMount(() => {
             >
               Add To Cart
             </button>
-            <WishListIcon />
+            <WishListIcon :product="product" v-if="authStore.isAuthenticated" />
           </div>
         </div>
       </div>

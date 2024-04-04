@@ -6,7 +6,7 @@ const authStore = reactive({
     apiBase: 'http://localhost:8000',
     isAuthenticated: localStorage.getItem('auth') == 1,
     user: JSON.parse(localStorage.getItem('user')),
-    async fetchPublicApi(endPoint = "", params = "", requestType = "GET") {
+    async fetchPublicApi(endPoint = "", params = {}, requestType = "GET") {
         let request = {
             method: requestType.toUpperCase(),
             headers: {
@@ -25,7 +25,7 @@ const authStore = reactive({
         const response = await res.json();
         return response;
     },
-    async fetchProtectedApi(endPoint = "", params = "", requestType = "GET") {
+    async fetchProtectedApi(endPoint = "", params = {}, requestType = "GET") {
         const token = authStore.getUserToken()
         let request = {
             method: requestType.toUpperCase(),
